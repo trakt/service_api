@@ -2,8 +2,8 @@ module ServiceApi
   class UriTokens
     attr_reader :uri_template
 
-    def initialize(uri_template)
-      @uri_template = URITemplate.new(uri_template)
+    def initialize(*args)
+      @uri_template = URITemplate.new(*args)
     end
 
     def token_values
