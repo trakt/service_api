@@ -24,8 +24,6 @@ module ServiceApi
     def initialize(client)
       @client = client
       @params = {}
-      @mandatory_params = {}
-      @optional_params = {}
     end
 
     protected
@@ -88,7 +86,7 @@ module ServiceApi
 
     def uri_tokens(uri = nil)
       if uri
-        @uri_tokens = ServiceApi::UriTokens.new(uri)
+        @uri_tokens = ServiceApi::UriTokens.new(uri_kind, uri)
       else
         @uri_tokens
       end
@@ -100,6 +98,10 @@ module ServiceApi
 
     def query_params
       @params.reject{ |request_params| token?(request_params) }
+    end
+
+    def uri_kind
+      :default
     end
 
     def base_url

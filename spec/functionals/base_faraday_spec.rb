@@ -24,7 +24,7 @@ end
 
 class SampleApi < MyApi
   def find
-    path('/test/request').params(sample: true, api_key: 'abcd').get
+    path('/test/{request}').params(sample: true, api_key: 'abcd', request: 'request').get
   end
 
   def find_url
@@ -32,15 +32,42 @@ class SampleApi < MyApi
   end
 end
 
+class Sample2Api < MyApi
+  def find
+    path('/test/:request').params(sample: true, api_key: 'abcd', request: 'request').get
+  end
+
+  def find_url
+    path('/test/request').params(sample: true, api_key: 'abcd').url
+  end
+
+  def uri_kind
+    :colon
+  end
+end
+
 describe ServiceApi::BaseFaraday do
   let(:client) { Client.new }
   let(:model) { SampleApi.new(client) }
+  let(:model2) { Sample2Api.new(client) }
 
-  it 'should return string' do
-    model.find.body.should == 'OK'
+  describe 'model' do
+    it 'should return string' do
+      model.find.body.should == 'OK'
+    end
+
+    it 'should return full url' do
+      model.find_url.should == 'http://example.com/test/request'
+    end
   end
 
-  it 'should return full url' do
-    model.find_url.should == 'http://example.com/test/request'
+  describe 'model2' do
+    it 'should return string' do
+      model2.find.body.should == 'OK'
+    end
+
+    it 'should return full url' do
+      model2.find_url.should == 'http://example.com/test/request'
+    end
   end
 end
