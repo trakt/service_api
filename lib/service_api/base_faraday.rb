@@ -1,6 +1,7 @@
 require 'faraday'
 require 'faraday_middleware'
 require 'uri_template'
+require 'queryparams'
 
 module ServiceApi
   # BaseFaraday is module for Faraday api which should be included in own base Api class.
@@ -62,7 +63,7 @@ module ServiceApi
     #  path('/test/request').params(sample: true, api_key: 'abcd').url
     #
     def url
-      "#{base_url}#{uri}"
+      "#{base_url}#{uri}#{query_params_formatted}"
     end
 
     private
@@ -98,6 +99,11 @@ module ServiceApi
 
     def query_params
       @params.reject{ |request_params| token?(request_params) }
+    end
+
+    def query_params_formatted
+      params = query_params
+      params.empty? ? '' : "?#{QueryParams.encode(params)}"
     end
 
     def uri_kind
