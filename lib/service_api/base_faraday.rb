@@ -17,13 +17,12 @@ module ServiceApi
   #   end
   #
   module BaseFaraday
-
-    # Initilizer require client class as parameter
+    # Initilizer require config hash as parameter
     #
-    #   MyApi.new(client)
+    #   MyApi.new(config)
     #
-    def initialize(client)
-      @client = client
+    def initialize(config)
+      @config = config
       @params = {}
     end
 
@@ -73,10 +72,10 @@ module ServiceApi
         builder.response :xml,  content_type: /\bxml$/
         builder.response :json, content_type: /\bjson$/
 
-        if @client.options[:adapter] == :test
-          builder.adapter @client.options[:adapter], @client.options[:adapter_options]
+        if @config[:adapter] == :test
+          builder.adapter @config[:adapter], @config[:adapter_options]
         else
-          builder.adapter @client.options[:adapter]
+          builder.adapter @config[:adapter]
         end
       end
     end

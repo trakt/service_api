@@ -1,17 +1,5 @@
 require 'spec_helper'
 
-class Client
-  def options
-    { adapter: :test, adapter_options: faraday_stubs }
-  end
-
-  def faraday_stubs
-    Faraday::Adapter::Test::Stubs.new do |stub|
-      stub.get('/test/request?api_key=abcd&sample=true') { [200, {}, 'OK'] }
-    end
-  end
-end
-
 class MyApi
   include ServiceApi::BaseFaraday
 
@@ -47,9 +35,16 @@ class Sample2Api < MyApi
 end
 
 describe ServiceApi::BaseFaraday do
-  let(:client) { Client.new }
-  let(:model) { SampleApi.new(client) }
-  let(:model2) { Sample2Api.new(client) }
+  let(:config) do
+    {
+      adapter: :test,
+      adapter_options: Faraday::Adapter::Test::Stubs.new do |stub|
+        stub.get('/test/request?api_key=abcd&sample=true') { [200, {}, 'OK'] }
+      end
+    }
+  end
+  let(:model) { SampleApi.new(config) }
+  let(:model2) { Sample2Api.new(config) }
 
   describe 'model' do
     it 'should return string' do
