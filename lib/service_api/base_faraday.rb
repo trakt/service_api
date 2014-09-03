@@ -75,7 +75,7 @@ module ServiceApi
         if @config[:adapter] == :test
           builder.adapter @config[:adapter], @config[:adapter_options]
         else
-          builder.adapter @config[:adapter]
+          builder.adapter @config[:adapter] || :net_http
         end
       end
     end
