@@ -65,6 +65,12 @@ module ServiceApi
       "#{base_url}#{uri}#{query_params_formatted}"
     end
 
+    # Mapping arguments passing to method, convert normal arguments to hash, and mapping hash keys
+    #
+    def normalize_options(mapper, *options)
+      NormalizeOptions.new(mapper, options).call
+    end
+
     private
 
     def connection
