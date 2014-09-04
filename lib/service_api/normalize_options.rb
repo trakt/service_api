@@ -11,7 +11,7 @@ class NormalizeOptions
     @options = options
   end
 
-  def parse
+  def call
     if hash_options?
       parse_hash_options
     elsif arguments_count_corrent?
