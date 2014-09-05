@@ -68,7 +68,7 @@ module ServiceApi
     # Mapping arguments passing to method, convert normal arguments to hash, and mapping hash keys
     #
     def normalize_options(mapper, *options)
-      NormalizeOptions.new(mapper, options).call
+      NormalizeOptions.new(mapper, *options).call
     end
 
     private
